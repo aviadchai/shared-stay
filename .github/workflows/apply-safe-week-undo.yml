@@ -65,7 +65,9 @@ jobs:
           s = fill_pattern.sub(new_fill, s, count=1)
 
           replace_once('$("prevBtn").onclick=()=>{view=add(view,-14);render()};', '$("undoBtn").onclick=undoLast;$("prevBtn").onclick=()=>{view=add(view,-14);render()};', 'undo handler')
-          replace_once('ss_sw6_reload', 'ss_sw8_reload', 'service worker reload key')
+          if s.count('ss_sw6_reload') != 2:
+              raise SystemExit(f'service worker reload key: expected exactly two matches, found {s.count("ss_sw6_reload")}')
+          s = s.replace('ss_sw6_reload', 'ss_sw8_reload')
 
           p.write_text(s, encoding='utf-8')
 
@@ -86,6 +88,7 @@ jobs:
           assert 'confirm(`לשנות את כל שבוע' in s
           assert 'async function undoLast()' in s
           assert 'shared-stay-version" content="8"' in s
+          assert s.count('ss_sw8_reload') == 2
           assert "shared-stay-v8" in Path('sw.js').read_text(encoding='utf-8')
           m=re.search(r'<script type="module">(.*?)</script>',s,re.S)
           assert m
