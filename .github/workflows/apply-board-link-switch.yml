@@ -1,0 +1,64 @@
+name: Apply board link switch patch
+on:
+  push:
+    branches: [fix/cross-browser-board-link]
+permissions:
+  contents: write
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/cross-browser-board-link
+      - name: Patch app
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('index.html'); s=p.read_text(encoding='utf-8')
+          def once(old,new,label):
+              global s
+              c=s.count(old)
+              if c!=1: raise SystemExit(f'{label}: {c} matches')
+              s=s.replace(old,new,1)
+          once('<meta name="shared-stay-version" content="8">','<meta name="shared-stay-version" content="9">','version')
+          settings_old='<button class="add" id="applyPattern">החל את הדפוס מחדש על השבועיים שמוצגים</button><div class="actions">'
+          settings_new='<button class="add" id="applyPattern">החל את הדפוס מחדש על השבועיים שמוצגים</button><div class="field" style="margin-top:14px"><label>פתיחת אותו לוח ממכשיר / דפדפן אחר</label><input id="boardLink" inputmode="url" autocomplete="off" placeholder="הדבק כאן את הקישור מה־Chrome"></div><div class="sub" id="boardIdHint" style="margin-top:-6px">לוח נוכחי</div><button class="add" id="openBoardLink">פתח לוח מהקישור</button><div class="actions">'
+          once(settings_old,settings_new,'settings link controls')
+          marker='function profiles(){'
+          code='''function boardSidFrom(v){v=String(v||"").trim();if(/^[a-f0-9]{24}$/i.test(v))return v.toLowerCase();try{let u=new URL(v,location.href),x=u.searchParams.get("s")||"";return/^[a-f0-9]{24}$/i.test(x)?x.toLowerCase():""}catch(e){return""}}function showBoardHint(){let x=$("boardIdHint");if(x)x.textContent=`הלוח הנוכחי: ${SID.slice(0,6)}…${SID.slice(-4)}`}$("openBoardLink").onclick=()=>{let target=boardSidFrom($("boardLink").value);if(!target){toast("לא מצאתי מזהה לוח תקין בקישור");return}if(target===SID){toast("זה כבר הלוח שפתוח עכשיו");return}localStorage.setItem("ss_default_sid",target);localStorage.setItem("ss_last_board",target);let u=new URL(location.href);u.searchParams.set("s",target);location.href=u.toString()};\n'''
+          if s.count(marker)!=1: raise SystemExit('profile marker mismatch')
+          s=s.replace(marker,code+marker,1)
+          settings_open='$("settingsBtn").onclick=()=>{$("nameA").value=S.names.A;'
+          settings_open_new='$("settingsBtn").onclick=()=>{$("boardLink").value="";showBoardHint();$("nameA").value=S.names.A;'
+          once(settings_open,settings_open_new,'settings open')
+          if s.count('ss_sw8_reload')!=2: raise SystemExit('reload key count mismatch')
+          s=s.replace('ss_sw8_reload','ss_sw9_reload')
+          p.write_text(s,encoding='utf-8')
+          sw=Path('sw.js'); t=sw.read_text(encoding='utf-8')
+          if t.count("const CACHE='shared-stay-v8';")!=1: raise SystemExit('cache marker mismatch')
+          sw.write_text(t.replace("const CACHE='shared-stay-v8';","const CACHE='shared-stay-v9';",1),encoding='utf-8')
+          PY
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          s=Path('index.html').read_text(encoding='utf-8')
+          assert 'id="boardLink"' in s and 'id="openBoardLink"' in s
+          assert 'function boardSidFrom' in s and 'showBoardHint()' in s
+          assert 'shared-stay-version" content="9"' in s
+          m=re.search(r'<script type="module">(.*?)</script>',s,re.S); assert m
+          Path('/tmp/app.mjs').write_text(m.group(1),encoding='utf-8')
+          PY
+          node --check /tmp/app.mjs
+      - name: Commit patch
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/apply-board-link-switch.yml
+          git add index.html sw.js
+          git commit -m "Allow switching to the same board from a shared link"
+          git push origin HEAD:fix/cross-browser-board-link
