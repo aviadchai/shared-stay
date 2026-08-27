@@ -1,0 +1,102 @@
+/* Shared Stay v10 — visual refresh only. No data/state changes. */
+:root{
+  --surface:#ffffff;
+  --surface-soft:#f7f8f7;
+  --ink-soft:#5f6966;
+  --hairline:rgba(23,32,30,.08);
+  --shadow-soft:0 10px 30px rgba(25,36,33,.055);
+  --shadow-day:0 5px 16px rgba(25,36,33,.075);
+}
+
+html,body{background:#f3f5f4!important}
+body{padding-top:calc(env(safe-area-inset-top) + 10px)!important}
+.app{width:min(100%,860px)!important;padding:0 12px!important}
+
+/* Header — quieter and more app-like */
+.top{gap:8px!important;padding:6px 1px 12px!important;align-items:center!important}
+.brand h1{font-size:23px!important;letter-spacing:-.7px!important;line-height:1!important}
+.brand p{font-size:10px!important;margin-top:5px!important;color:#7b8481!important}
+.icon{width:40px!important;height:40px!important;border:1px solid var(--hairline)!important;border-radius:14px!important;background:rgba(255,255,255,.94)!important;box-shadow:0 3px 12px rgba(25,36,33,.045)!important;color:#34403d!important}
+.sync{font-size:9px!important;margin:0 1px 9px!important;color:#7a8481!important}
+.undoMini{border-color:var(--hairline)!important;border-radius:10px!important;background:#fff!important}
+
+/* Date navigation */
+.nav{grid-template-columns:42px 1fr 42px!important;gap:8px!important;margin-bottom:10px!important}
+.nav button{height:40px!important;border:1px solid var(--hairline)!important;border-radius:14px!important;background:#fff!important;box-shadow:0 2px 8px rgba(25,36,33,.035)!important}
+.range{font-size:12px!important;letter-spacing:-.1px!important}
+.range small{font-size:9px!important;margin-top:3px!important}
+
+/* Zoom control — visually secondary */
+.viewbar{border:0!important;background:rgba(255,255,255,.78)!important;border-radius:18px!important;padding:10px 13px 11px!important;margin-bottom:12px!important;box-shadow:none!important}
+.viewtop{margin-bottom:6px!important}
+.viewtop b{font-size:10px!important;color:#46514e!important}
+.viewtop span{font-size:9px!important;color:#87908d!important}
+.sliderrow{gap:8px!important}
+.sliderrow small{font-size:8px!important;color:#8a9390!important;min-width:42px!important}
+.widthRange{height:27px!important}
+.widthRange::-webkit-slider-runnable-track{height:6px!important}
+.widthRange::-webkit-slider-thumb{width:24px!important;height:24px!important;border-width:5px!important;margin-top:-9px!important}
+
+/* Week cards */
+.week{border:0!important;border-radius:22px!important;padding:13px 10px 11px!important;margin-bottom:12px!important;background:var(--surface)!important;box-shadow:var(--shadow-soft)!important;overflow:hidden!important}
+.weekhead{min-height:28px!important;margin-bottom:10px!important;padding:0 2px!important}
+.weektitle{display:flex!important;align-items:baseline!important;gap:7px!important}
+.weektitle b{font-size:14px!important;letter-spacing:-.25px!important}
+.weektitle span{font-size:9px!important;margin:0!important;color:#8a9390!important}
+
+/* Remove dangerous / visually noisy whole-week buttons */
+.quick{display:none!important}
+
+/* Day rail */
+.days{gap:8px!important;padding:2px 1px 8px!important;scroll-padding-inline:1px!important}
+.day{border:0!important;border-radius:18px!important;box-shadow:var(--shadow-day)!important;transition:height .18s ease,width .18s ease,transform .12s ease,box-shadow .15s ease!important}
+.day:active{transform:scale(.975)!important;box-shadow:0 2px 8px rgba(25,36,33,.07)!important}
+.day.today{outline:2px solid #24302d!important;outline-offset:2px!important}
+.daytop{left:6px!important;right:6px!important;top:6px!important;height:36px!important;border-radius:12px!important;padding:4px 7px!important;background:rgba(255,255,255,.92)!important;box-shadow:0 2px 8px rgba(20,30,27,.05)!important;backdrop-filter:blur(10px)!important}
+.daytop small{color:#66716d!important;letter-spacing:.1px!important}
+.daytop strong{font-weight:900!important;letter-spacing:-.6px!important}
+.ownerTag{padding:3px 6px!important;border-radius:8px!important;background:rgba(255,255,255,.9)!important;box-shadow:0 1px 5px rgba(20,30,27,.04)!important}
+.transition{left:5px!important;right:5px!important;background:rgba(22,30,28,.36)!important}
+.transition span{font-size:8px!important;padding:2px 5px!important;border:0!important;border-radius:8px!important;box-shadow:0 2px 7px rgba(20,30,27,.07)!important}
+.mark{left:6px!important;right:6px!important;bottom:6px!important}
+.mark span{font-size:8px!important;padding:3px 6px!important;border-radius:9px!important;box-shadow:0 2px 7px rgba(20,30,27,.05)!important}
+
+/* Stats — one calm summary card */
+.stats{border:0!important;border-radius:22px!important;padding:14px!important;margin-top:13px!important;background:#fff!important;box-shadow:var(--shadow-soft)!important}
+.statbar{height:10px!important;margin-bottom:11px!important;background:#eef1ef!important}
+.statsgrid{gap:8px!important}
+.stat{background:#f7f9f8!important;border-radius:14px!important;padding:10px 7px!important}
+.stat small{font-size:8px!important;color:#818b88!important}
+.stat strong{font-size:18px!important;letter-spacing:-.4px!important;margin:3px 0 2px!important}
+.stat em{font-size:9px!important;color:#87908d!important}
+.legend{font-size:8px!important;color:#8a9390!important;padding:10px 0 2px!important;gap:12px!important}
+
+/* Sheets / editors */
+.overlay{background:rgba(18,24,22,.38)!important;backdrop-filter:blur(7px)!important}
+.sheet{border-radius:28px 28px 0 0!important;padding:20px 16px calc(env(safe-area-inset-bottom) + 20px)!important;box-shadow:0 -18px 50px rgba(0,0,0,.18)!important}
+.sheet h2{font-size:20px!important;letter-spacing:-.4px!important}
+.sheet .sub{font-size:10px!important;color:#7c8683!important;margin-bottom:16px!important}
+.field label{font-size:10px!important;color:#69736f!important;margin-bottom:6px!important}
+.field input,.field select,.field textarea{border:1px solid rgba(23,32,30,.09)!important;background:#f7f9f8!important;border-radius:14px!important;padding:11px 12px!important}
+.seg{gap:8px!important}
+.seg button{border-color:rgba(23,32,30,.09)!important;border-radius:14px!important;padding:11px 7px!important;background:#f7f9f8!important}
+.trcard{border:0!important;border-radius:17px!important;padding:12px!important;background:#f5f7f6!important}
+.trhead{margin-bottom:11px!important}
+.trhead b{font-size:11px!important}
+.trhead button{border-radius:10px!important}
+.add{border-color:#cdd5d2!important;border-radius:14px!important;padding:11px!important;background:#fafbfa!important}
+.private{border-radius:16px!important}
+.actions{gap:8px!important;padding-top:10px!important}
+.btn{border-radius:14px!important;padding:13px 8px!important;font-size:12px!important}
+
+@media(max-width:520px){
+  .app{padding:0 9px!important}
+  .top{gap:6px!important}
+  .brand h1{font-size:22px!important}
+  .icon{width:38px!important;height:38px!important;border-radius:13px!important}
+  .week{padding:12px 8px 10px!important;border-radius:20px!important}
+  .weektitle b{font-size:13px!important}
+  .days{gap:7px!important}
+  .day{border-radius:16px!important}
+  .stats{padding:12px!important;border-radius:20px!important}
+}
